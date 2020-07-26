@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button } from 'antd'
 
 import * as ROUTES from '../../constants/routes'
+import * as SESSION from '../Firebase/authReducer'
 
 import { auth } from '../Firebase'
 import { AuthContext } from '../Firebase/context'
@@ -36,7 +37,7 @@ const NavigationAuth = () => {
                         type="primary"
                         onClick={() => {
                             auth.signOut()
-                            context.authUserDispatch({ type: 'SIGN_OUT' })
+                            context.authUserDispatch({ type: SESSION.SIGN_OUT })
                         }}
                     >
                         Sign Out

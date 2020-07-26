@@ -1,3 +1,6 @@
+export const SIGN_IN = 'SIGN_IN'
+export const SIGN_OUT = 'SIGN_OUT'
+
 const authReducer = (state, action) => {
     let uid
     if (action.payload) {
@@ -5,9 +8,9 @@ const authReducer = (state, action) => {
     }
 
     switch (action.type) {
-        case 'SIGN_IN':
+        case SIGN_IN:
             return { authUser: true, uid }
-        case 'SIGN_OUT':
+        case SIGN_OUT:
             return { authUser: false }
         default:
             return state
