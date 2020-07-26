@@ -1,9 +1,52 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { Button } from 'antd'
 
 import * as ROUTES from '../../constants/routes'
 
-const Navigation = () => (
+import { auth } from '../Firebase'
+import { AuthContext } from '../Firebase/context'
+
+const Navigation = () => {
+    const context = useContext(AuthContext)
+    const authUser = context.authUser.authUser
+    if (authUser) {
+        return <NavigationAuth />
+    } else {
+        return <NavigationNoAuth />
+    }
+}
+
+const NavigationAuth = () => {
+    const context = useContext(AuthContext)
+    return (
+        <div>
+            <ul>
+                <li>
+                    <Link to={ROUTES.LANDING}>Landing</Link>
+                </li>
+                <li>
+                    <Link to={ROUTES.DASHBOARD}>Dashboard</Link>
+                </li>
+                <li>
+                    <Link to={ROUTES.ACCOUNT}>Account</Link>
+                </li>
+                <li>
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            auth.signOut()
+                            context.authUserDispatch({ type: 'SIGN_OUT' })
+                        }}
+                    >
+                        Sign Out
+                    </Button>
+                </li>
+            </ul>
+        </div>
+    )
+}
+const NavigationNoAuth = () => (
     <div>
         <ul>
             <li>
@@ -14,12 +57,6 @@ const Navigation = () => (
             </li>
             <li>
                 <Link to={ROUTES.LANDING}>Landing</Link>
-            </li>
-            <li>
-                <Link to={ROUTES.DASHBOARD}>Dashboard</Link>
-            </li>
-            <li>
-                <Link to={ROUTES.ACCOUNT}>Account</Link>
             </li>
         </ul>
     </div>
