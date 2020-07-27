@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { Row, Col, Typography } from 'antd'
+import React, { useEffect, useState, useContext } from 'react'
+import { useLocation, Link } from 'react-router-dom'
+import { Row, Col, Typography, Button } from 'antd'
 
-import { getListingDetails } from '../Firebase'
+import { AuthContext } from '../Firebase/context'
+import { getListingDetails, canUserEditDoc } from '../Firebase'
 
 // get url parameters
 const useQuery = () => {
@@ -11,25 +12,38 @@ const useQuery = () => {
 
 const ListingDetails = () => {
     const [listingDetails, setListingDetails] = useState()
+    const context = useContext(AuthContext)
     const query = useQuery()
+    const docID = query.get('id')
 
     useEffect(() => {
-        getListingDetails(query.get('id')).then((doc) => setListingDetails(doc))
+        getListingDetails(docID).then((doc) => setListingDetails(doc))
     }, [])
 
     return (
         <Col>
             <Typography.Title>Listing Details</Typography.Title>
-            <Row>
+            <Col>
                 {renderListingDetails(listingDetails)}
-                <Col></Col>
-            </Row>
+                <Col>{renderEditButton(context.authUser.uid, docID)}</Col>
+            </Col>
         </Col>
     )
 }
 
+const renderEditButton = (uid, docID) => {
+    let flag = uid ? canUserEditDoc(uid, docID) : false
+
+    if (flag) {
+        return (
+            <Link to={`/listing/edit?id=${docID}`}>
+                <Button>Edit</Button>
+            </Link>
+        )
+    }
+}
+
 const renderListingDetails = (listing) => {
-    console.log(listing)
     if (listing) {
         return (
             <Col>

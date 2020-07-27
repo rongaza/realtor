@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { useStorageReducer } from 'react-storage-hooks'
 
@@ -10,12 +10,14 @@ import Dashboard from '../Dashboard/Dashboard'
 import Account from '../Account'
 import AddListing from '../AddListing'
 import ListingDetails from '../ListingDetails/ListingDetails'
+import EditListing from '../EditListing/EditListing'
 
 import { AuthContext } from '../Firebase/context'
 import authReducer from '../Firebase/authReducer'
 import { auth } from '../Firebase'
 import * as SESSION from '../Firebase/authReducer'
 
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 import * as ROUTES from '../../constants/routes'
 
 function App() {
@@ -28,11 +30,11 @@ function App() {
     )
 
     useEffect(() => {
-        auth.onAuthStateChanged(
-            (user) =>
-                user &&
+        auth.onAuthStateChanged((user) => {
+            if (user) {
                 authUserDispatch({ type: SESSION.SIGN_IN, payload: user })
-        )
+            }
+        })
     }, [])
 
     useEffect(() => {
@@ -49,10 +51,20 @@ function App() {
                     <Route exact path={ROUTES.LANDING} component={Landing} />
                     <Route path={ROUTES.SIGN_UP} component={SignUp} />
                     <Route path={ROUTES.SIGN_IN} component={SignIn} />
-                    <Route path={ROUTES.DASHBOARD} component={Dashboard} />
-                    <Route path={ROUTES.ACCOUNT} component={Account} />
-                    <Route path={ROUTES.ADD_LISTING} component={AddListing} />
                     <Route path={ROUTES.DETAILS} component={ListingDetails} />
+                    <ProtectedRoute
+                        path={ROUTES.DASHBOARD}
+                        component={Dashboard}
+                    />
+                    <ProtectedRoute
+                        path={ROUTES.ADD_LISTING}
+                        component={AddListing}
+                    />
+                    <ProtectedRoute path={ROUTES.ACCOUNT} component={Account} />
+                    <ProtectedRoute
+                        path={ROUTES.EDIT}
+                        component={EditListing}
+                    />
                 </div>
             </Router>
         </AuthContext.Provider>

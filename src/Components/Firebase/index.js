@@ -82,12 +82,19 @@ export const getUserListings = async (authUser, setState) => {
     setState(userListings)
 }
 
-export const getUserListingIds = async (authUser, setState) => {
-    const listingsRef = await db.collection('users').doc(authUser).get()
+export const canUserEditDoc = async (uid, docID) => {
+    console.log(uid)
+    const results = await getUserListingIds(uid)
+    return results.includes(docID)
+}
 
-    const listingIDs = [...listingsRef.data().listings]
+export const getUserListingIds = async (uid) => {
+    let listingIDs = []
+    const listingsRef = await db.collection('users').doc(uid).get()
 
-    setState(listingIDs)
+    listingIDs = [...listingsRef.data().listings]
+
+    return listingIDs
 }
 
 export const getListingDetails = async (id) => {

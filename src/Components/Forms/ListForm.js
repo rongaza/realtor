@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { validLocation } from '../../helpers'
 import { Row, Col, Form, Input, Typography, Button, DatePicker } from 'antd'
 
-const ListForm = ({ addDoc }) => {
+const ListForm = ({ submit }) => {
     const [formValues, setFormValues] = useState({})
     const [locationErrors, setLocationErrors] = useState({})
 
@@ -37,7 +37,7 @@ const ListForm = ({ addDoc }) => {
     const handleSubmit = () => {
         console.log('form submit')
         if (validLocation(formValues, locationErrors, setLocationErrors)) {
-            addDoc(formValues)
+            submit(formValues)
         }
     }
 
