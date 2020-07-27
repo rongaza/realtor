@@ -1,13 +1,15 @@
 import React, { useReducer, useEffect } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { useStorageReducer } from 'react-storage-hooks'
 
 import Navigation from '../Navigation'
-import Landing from '../Landing'
+import Landing from '../Landing/Landing'
 import SignUp from '../SignUp'
 import SignIn from '../SignIn'
-import Dashboard from '../Dashboard'
+import Dashboard from '../Dashboard/Dashboard'
 import Account from '../Account'
 import AddListing from '../AddListing'
+import ListingDetails from '../ListingDetails/ListingDetails'
 
 import { AuthContext } from '../Firebase/context'
 import authReducer from '../Firebase/authReducer'
@@ -18,18 +20,24 @@ import * as ROUTES from '../../constants/routes'
 
 function App() {
     const initialState = { authUser: false }
-    const [authUser, authUserDispatch] = useReducer(authReducer, initialState)
+    const [authUser, authUserDispatch] = useStorageReducer(
+        localStorage,
+        'authReducer',
+        authReducer,
+        initialState
+    )
 
     useEffect(() => {
-        auth.onAuthStateChanged((authUser) => {
-            authUser &&
-                authUserDispatch({ type: SESSION.SIGN_IN, payload: authUser })
-        })
+        auth.onAuthStateChanged(
+            (user) =>
+                user &&
+                authUserDispatch({ type: SESSION.SIGN_IN, payload: user })
+        )
     }, [])
 
-    // useEffect(() => {
-    //     console.log(authUser)
-    // }, [authUser])
+    useEffect(() => {
+        console.log(authUser)
+    }, [authUser])
     return (
         <AuthContext.Provider value={{ authUser, authUserDispatch }}>
             <Router>
@@ -44,6 +52,7 @@ function App() {
                     <Route path={ROUTES.DASHBOARD} component={Dashboard} />
                     <Route path={ROUTES.ACCOUNT} component={Account} />
                     <Route path={ROUTES.ADD_LISTING} component={AddListing} />
+                    <Route path={ROUTES.DETAILS} component={ListingDetails} />
                 </div>
             </Router>
         </AuthContext.Provider>

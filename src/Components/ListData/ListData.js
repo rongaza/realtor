@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Row, Col, Card } from 'antd'
 
 const ListData = ({ data }) => {
@@ -7,6 +8,9 @@ const ListData = ({ data }) => {
             return (
                 <Col key={listing.id}>
                     <Card>
+                        <Link to={`/listing/details?id=${listing.id}`}>
+                            Stuff
+                        </Link>
                         <p>{listing.data.street}</p>
                         <p>
                             {listing.data.city},{listing.data.state} --{' '}

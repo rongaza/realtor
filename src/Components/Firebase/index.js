@@ -62,18 +62,15 @@ export const getListings = async (setListingsCB) => {
     return setListingsCB(results)
 }
 
-export const getUserListings = async (authUser) => {
+export const getUserListings = async (authUser, setState) => {
     const userListings = []
-    const listingsRef = await db
-        .collection('users')
-        .doc('6Kdh2855rydfiPevegFCDNehGtP2')
-        .get()
+    const listingsRef = await db.collection('users').doc(authUser).get()
 
     const listingIDs = [...listingsRef.data().listings]
     // const collections = await listingsRef.listCollections()
     // //
+    // const userListingsRef = await db.collection('listings')
 
-    const userListingsRef = await db.collection('listings')
     const snapshot = await db
         .collection('listings')
         .where(firebase.firestore.FieldPath.documentId(), 'in', [...listingIDs])
@@ -81,5 +78,20 @@ export const getUserListings = async (authUser) => {
     snapshot.forEach((doc) => {
         userListings.push({ id: doc.id, data: doc.data() })
     })
-    return userListings
+
+    setState(userListings)
+}
+
+export const getUserListingIds = async (authUser, setState) => {
+    const listingsRef = await db.collection('users').doc(authUser).get()
+
+    const listingIDs = [...listingsRef.data().listings]
+
+    setState(listingIDs)
+}
+
+export const getListingDetails = async (id) => {
+    const docRef = await db.collection('listings').doc(id)
+    const doc = await docRef.get()
+    return doc.data()
 }

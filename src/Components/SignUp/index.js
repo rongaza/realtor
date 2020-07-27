@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { auth, createNewUser } from '../Firebase'
+import { createNewUser } from '../Firebase'
 
 import { Form, Input, Button, Row, Col, Typography } from 'antd'
 

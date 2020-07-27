@@ -1,15 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { validLocation } from '../../helpers'
-import {
-    Row,
-    Col,
-    Form,
-    Input,
-    Typography,
-    Button,
-    InputNumber,
-    DatePicker,
-} from 'antd'
+import { Row, Col, Form, Input, Typography, Button, DatePicker } from 'antd'
 
 const AddListing = ({ addDoc }) => {
     const [formValues, setFormValues] = useState({})
@@ -34,14 +25,14 @@ const AddListing = ({ addDoc }) => {
         })
     }
 
-    const handlePriceChange = (price) => {
-        setFormValues((formValues) => {
-            return {
-                ...formValues,
-                price,
-            }
-        })
-    }
+    // const handlePriceChange = (price) => {
+    //     setFormValues((formValues) => {
+    //         return {
+    //             ...formValues,
+    //             price,
+    //         }
+    //     })
+    // }
 
     const handleSubmit = () => {
         console.log('form submit')
