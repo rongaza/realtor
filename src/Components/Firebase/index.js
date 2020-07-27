@@ -83,7 +83,6 @@ export const getUserListings = async (authUser, setState) => {
 }
 
 export const canUserEditDoc = async (uid, docID) => {
-    console.log(uid)
     const results = await getUserListingIds(uid)
     return results.includes(docID)
 }

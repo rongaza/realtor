@@ -12,29 +12,35 @@ const useQuery = () => {
 
 const ListingDetails = () => {
     const [listingDetails, setListingDetails] = useState()
+    const [editFlag, setEditFlag] = useState(false)
     const context = useContext(AuthContext)
     const query = useQuery()
     const docID = query.get('id')
 
     useEffect(() => {
         getListingDetails(docID).then((doc) => setListingDetails(doc))
+        canUserEditDoc(context.authUser.uid, docID).then((res) =>
+            setEditFlag(res)
+        )
     }, [])
 
+    useEffect(() => {
+        console.log(editFlag)
+    }, [editFlag])
     return (
         <Col>
             <Typography.Title>Listing Details</Typography.Title>
             <Col>
                 {renderListingDetails(listingDetails)}
-                <Col>{renderEditButton(context.authUser.uid, docID)}</Col>
+                <Col>{renderEditButton(editFlag, docID)}</Col>
             </Col>
         </Col>
     )
 }
 
-const renderEditButton = (uid, docID) => {
-    let flag = uid ? canUserEditDoc(uid, docID) : false
-
-    if (flag) {
+const renderEditButton = (editFlag, docID) => {
+    console.log('flag is ', editFlag)
+    if (editFlag) {
         return (
             <Link to={`/listing/edit?id=${docID}`}>
                 <Button>Edit</Button>
