@@ -1,0 +1,16 @@
+mls -  unique
+street1
+street2
+city
+state
+zip
+neighborhood
+sales price
+date listed
+bedrooms
+photos
+bathrooms
+garage size
+square feet
+lot size
+description

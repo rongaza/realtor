@@ -7,10 +7,12 @@ import SignUp from '../SignUp'
 import SignIn from '../SignIn'
 import Dashboard from '../Dashboard'
 import Account from '../Account'
+import AddListing from '../AddListing'
 
 import { AuthContext } from '../Firebase/context'
 import authReducer from '../Firebase/authReducer'
 import { auth } from '../Firebase'
+import * as SESSION from '../Firebase/authReducer'
 
 import * as ROUTES from '../../constants/routes'
 
@@ -20,7 +22,8 @@ function App() {
 
     useEffect(() => {
         auth.onAuthStateChanged((authUser) => {
-            authUser && authUserDispatch({ type: 'SIGN_IN', payload: authUser })
+            authUser &&
+                authUserDispatch({ type: SESSION.SIGN_IN, payload: authUser })
         })
     }, [])
 
@@ -40,6 +43,7 @@ function App() {
                     <Route path={ROUTES.SIGN_IN} component={SignIn} />
                     <Route path={ROUTES.DASHBOARD} component={Dashboard} />
                     <Route path={ROUTES.ACCOUNT} component={Account} />
+                    <Route path={ROUTES.ADD_LISTING} component={AddListing} />
                 </div>
             </Router>
         </AuthContext.Provider>

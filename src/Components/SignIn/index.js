@@ -5,6 +5,7 @@ import { Row, Col, Typography, Form, Input, Button } from 'antd'
 
 import { auth } from '../Firebase'
 import { AuthContext } from '../Firebase/context'
+import * as SESSION from '../Firebase/authReducer'
 
 const INITIAL_STATE = {
     email: '',
@@ -22,7 +23,10 @@ const SignIn = () => {
     const handleOnFinish = () => {
         auth.signInWithEmailAndPassword(formValues.email, formValues.password)
             .then((authUser) => {
-                context.authUserDispatch({ type: 'SIGN_IN', payload: authUser })
+                context.authUserDispatch({
+                    type: SESSION.SIGN_IN,
+                    payload: authUser,
+                })
                 history.push('/')
             })
             .catch((error) => setError(error))

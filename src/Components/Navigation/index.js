@@ -33,6 +33,9 @@ const NavigationAuth = () => {
                     <Link to={ROUTES.ACCOUNT}>Account</Link>
                 </li>
                 <li>
+                    <Link to={ROUTES.ADD_LISTING}>Add New Listing</Link>
+                </li>
+                <li>
                     <Button
                         type="primary"
                         onClick={() => {

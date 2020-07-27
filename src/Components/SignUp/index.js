@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { auth } from '../Firebase'
+import { auth, createNewUser } from '../Firebase'
 
 import { Form, Input, Button, Row, Col, Typography } from 'antd'
 
@@ -21,25 +21,17 @@ const SignUp = () => {
 
     const handleFinish = () => {
         // e.preventDefault();
-        auth.createUserWithEmailAndPassword(
-            formValues.email,
-            formValues.passwordOne
-        )
-            .then((authUser) => {
-                setFormValues({
-                    username: '',
-                    email: '',
-                    passwordOne: '',
-                    passwordTwo: '',
-                })
-                console.log(authUser)
-                setError({ error: null })
-                history.push('/')
-            })
-            .catch((error) => {
-                console.log(error)
-                setError({ ...error })
-            })
+
+        createNewUser(formValues, setError)
+
+        setFormValues({
+            username: '',
+            email: '',
+            passwordOne: '',
+            passwordTwo: '',
+        })
+
+        history.push('/')
     }
 
     const handleOnChange = (e) => {

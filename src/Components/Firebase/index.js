@@ -16,4 +16,48 @@ firebase.initializeApp(config)
 
 export const auth = firebase.auth()
 
-// export const db = firebase.firestore()
+export const db = firebase.firestore()
+
+export const createNewUser = async (formValues, cbError) => {
+    const user = await auth
+        .createUserWithEmailAndPassword(
+            formValues.email,
+            formValues.passwordOne
+        )
+        .catch((error) => {
+            console.log(error)
+            cbError({ ...error })
+        })
+
+    // create listings array for users to put real estate listings
+    db.collection('users').doc(user.user.uid).set({ listings: [] })
+}
+
+export const addDoc = async (listing, authUser) => {
+    // add listing
+    let doc = await db.collection('listings').add({
+        ...listing,
+        state: listing.state.toUpperCase(),
+    })
+
+    // add photos
+
+    // add listing id to users listing array
+    db.collection('users')
+        .doc(authUser)
+        .update({
+            listings: firebase.firestore.FieldValue.arrayUnion(doc.id),
+        })
+}
+
+export const deleteDoc = async () => {}
+
+export const getListings = async (setListingsCB) => {
+    const listingsRef = await db.collection('listings')
+    const snapshot = await listingsRef.get()
+    const results = []
+    snapshot.forEach((doc) => {
+        results.push({ id: doc.id, data: doc.data() })
+    })
+    return setListingsCB(results)
+}
