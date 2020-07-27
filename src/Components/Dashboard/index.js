@@ -1,17 +1,27 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../Firebase/context'
+import { getUserListings } from '../Firebase'
+import ListData from '../ListData/ListData'
 
 const Dashboard = () => {
     const context = useContext(AuthContext)
+    const [userListings, setUserListings] = useState([])
 
-    const handleSignIn = () => {
-        context.dispatch({ type: 'SIGN_IN' })
+    const fetchData = async () => {
+        const results = await getUserListings()
+        setUserListings(results)
     }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+    useEffect(() => {
+        console.log(userListings)
+    }, [userListings])
     return (
         <div>
             <h1>Dashboard</h1>
-            <button onClick={handleSignIn}>Sign In</button>
-            {context.state === true ? <p>Signed In</p> : <p>Signed Out</p>}
+            <ListData data={userListings} />
         </div>
     )
 }

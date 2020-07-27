@@ -61,3 +61,25 @@ export const getListings = async (setListingsCB) => {
     })
     return setListingsCB(results)
 }
+
+export const getUserListings = async (authUser) => {
+    const userListings = []
+    const listingsRef = await db
+        .collection('users')
+        .doc('6Kdh2855rydfiPevegFCDNehGtP2')
+        .get()
+
+    const listingIDs = [...listingsRef.data().listings]
+    // const collections = await listingsRef.listCollections()
+    // //
+
+    const userListingsRef = await db.collection('listings')
+    const snapshot = await db
+        .collection('listings')
+        .where(firebase.firestore.FieldPath.documentId(), 'in', [...listingIDs])
+        .get()
+    snapshot.forEach((doc) => {
+        userListings.push({ id: doc.id, data: doc.data() })
+    })
+    return userListings
+}

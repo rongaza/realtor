@@ -27,9 +27,9 @@ function App() {
         })
     }, [])
 
-    useEffect(() => {
-        console.log(authUser)
-    }, [authUser])
+    // useEffect(() => {
+    //     console.log(authUser)
+    // }, [authUser])
     return (
         <AuthContext.Provider value={{ authUser, authUserDispatch }}>
             <Router>
