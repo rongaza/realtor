@@ -1,6 +1,6 @@
 Unfortunately I was not able to finish.
 
-###I was able to get about 75% done.
+##I was able to get about 75% done.
 
 The parts I got done are:User Authentication (Sign Up, Sign In, Sign Out)
 
@@ -24,7 +24,7 @@ Listing Details page to view listing specifics
 
 Created forms to (sign up, sign in, add listing, edit listing)
 
-###Parts I needed to finish:
+##Parts I needed to finish:
 
 Create route/endpoints/components for deleting a listing
 
@@ -33,7 +33,7 @@ Wire up the ability to add, edit, delete photos
 Create the search filter features using (useReducer, searchbar form, and context
 
 
-###Here's an overview of the libraries used.
+##Here's an overview of the libraries used.
 
 React 
 
