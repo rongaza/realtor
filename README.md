@@ -6,15 +6,9 @@ The parts I got done are:User Authentication (Sign Up, Sign In, Sign Out)
 
 Session Management (React context, provider, and useContext)
 
-<<<<<<< HEAD
 Authenticated User
 
 Protected Routes
-=======
-Authenticated User 
-
-Protected Routes 
->>>>>>> 8754b37804c0c9e627c0ba9546e64c3d8c233378
 
 Authenticated User can (Add Listing, Edit Listing)
 
@@ -38,7 +32,6 @@ Wire up the ability to add, edit, delete photos
 
 Create the search filter features using (useReducer, searchbar form, and context
 
-<<<<<<< HEAD
 ##Here's an overview of the libraries used.
 
 React
@@ -51,19 +44,4 @@ Antd - CSS Framework
 
 ZipcodesGoogle
 
-=======
-
-##Here's an overview of the libraries used.
-
-React 
-
-React Router Dom 
-
-React Storage Hooks
-
-Antd - CSS Framework
-
-ZipcodesGoogle 
-
->>>>>>> 8754b37804c0c9e627c0ba9546e64c3d8c233378
 Firebase Authentication and Firestore
