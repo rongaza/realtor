@@ -1,33 +1,40 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Row, Col, Card } from 'antd'
+import { Row, Col, Card, Typography } from 'antd'
 
-const ListData = ({ data }) => {
-    const renderListings = () =>
-        data.map((listing) => {
-            return (
-                <Col key={listing.id}>
-                    <Card>
-                        <Link to={`/listing/details?id=${listing.id}`}>
-                            Stuff
-                        </Link>
-                        <p>{listing.data.street}</p>
-                        <p>
-                            {listing.data.city},{listing.data.state} --{' '}
-                            {listing.data.zip}
-                        </p>
-                    </Card>
-                </Col>
-            )
-        })
-
+const ListData = ({ id, data }) => {
     return (
-        <Row>
-            <Col>
-                <h1>Houses</h1>
-                <Row>{data.length > 0 && renderListings()}</Row>
-            </Col>
-        </Row>
+        <Col key={id}>
+            <Card style={{ width: 300, height: 200 }}>
+                <Card.Meta title={`${data.street}`} />
+                <Row gutter={16}>
+                    <Col>
+                        <Typography.Text>Price: ${data.price}</Typography.Text>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col>
+                        <Typography.Text>
+                            {data.city},{data.state}
+                        </Typography.Text>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col>
+                        <Typography.Paragraph>
+                            {data.description}
+                        </Typography.Paragraph>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col>
+                        <Link to={`/listing/details?id=${id}`}>
+                            View Listing Details
+                        </Link>
+                    </Col>
+                </Row>
+            </Card>
+        </Col>
     )
 }
 

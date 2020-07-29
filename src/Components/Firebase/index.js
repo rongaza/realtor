@@ -2,6 +2,8 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 
+import { replaceUndefinedToNull } from '../../helpers/index'
+
 const config = {
     apiKey: process.env.REACT_APP_API_KEY,
     authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -33,21 +35,49 @@ export const createNewUser = async (formValues, cbError) => {
     db.collection('users').doc(user.user.uid).set({ listings: [] })
 }
 
+export const mlsUnique = async (mlsID) => {
+    let docRef = await db.collection('mls').doc(mlsID)
+    let doc = await docRef.get()
+    if (!doc.exists) {
+        return true
+    } else {
+        return false
+    }
+}
+
 export const addDoc = async (listing, authUser) => {
-    // add listing
-    let doc = await db.collection('listings').add({
-        ...listing,
-        state: listing.state.toUpperCase(),
-    })
+    listing = replaceUndefinedToNull(listing)
 
-    // add photos
-
-    // add listing id to users listing array
-    db.collection('users')
-        .doc(authUser)
-        .update({
-            listings: firebase.firestore.FieldValue.arrayUnion(doc.id),
+    try {
+        // add listing to firestore
+        let listingDoc = await db.collection('listings').add({
+            ...listing,
+            state: listing.state.toUpperCase(),
         })
+
+        // add photos
+
+        // add listing id to users listing array
+        let userListID = await db
+            .collection('users')
+            .doc(authUser)
+            .update({
+                listings: firebase.firestore.FieldValue.arrayUnion(
+                    listingDoc.id
+                ),
+            })
+        return userListID
+    } catch (error) {
+        return error
+    }
+}
+
+export const editDoc = (id, listing) => {
+    db.collection('listings')
+        .doc(id)
+        .update(listing)
+        .then((res) => res)
+        .catch((err) => console.log(err))
 }
 
 export const deleteDoc = async () => {}
@@ -62,24 +92,26 @@ export const getListings = async (setListingsCB) => {
     return setListingsCB(results)
 }
 
-export const getUserListings = async (authUser, setState) => {
+export const getUserListings = async (authUser, setListingsCB) => {
     const userListings = []
-    const listingsRef = await db.collection('users').doc(authUser).get()
+    // const listingsRef = db.collections('users').doc(authUser)
 
-    const listingIDs = [...listingsRef.data().listings]
-    // const collections = await listingsRef.listCollections()
-    // //
-    // const userListingsRef = await db.collection('listings')
-
-    const snapshot = await db
-        .collection('listings')
-        .where(firebase.firestore.FieldPath.documentId(), 'in', [...listingIDs])
+    const resultRef = await firebase
+        .firestore()
+        .collection('users')
+        .doc(authUser)
         .get()
-    snapshot.forEach((doc) => {
+
+    let userListingIDs = resultRef.data().listings
+
+    userListingIDs.forEach(async (id) => {
+        let docRef = await db.collection('listings').doc(id)
+        let doc = await docRef.get()
+
         userListings.push({ id: doc.id, data: doc.data() })
     })
 
-    setState(userListings)
+    setListingsCB(() => userListings)
 }
 
 export const canUserEditDoc = async (uid, docID) => {

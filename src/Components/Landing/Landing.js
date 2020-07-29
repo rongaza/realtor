@@ -3,7 +3,7 @@ import { getListings } from '../Firebase'
 
 import ListData from '../ListData/ListData'
 
-import { Row, Col } from 'antd'
+import { Row } from 'antd'
 
 const Landing = () => {
     const [listingResults, setListingResults] = useState([])
@@ -13,10 +13,17 @@ const Landing = () => {
     }, [])
 
     return (
-        <Row>
-            <Col>
-                <ListData data={listingResults} />
-            </Col>
+        <Row justify="center" gutter={[8, 8]}>
+            {listingResults &&
+                listingResults.map((listing) => {
+                    return (
+                        <ListData
+                            id={listing.id}
+                            data={listing.data}
+                            key={listing.id}
+                        />
+                    )
+                })}
         </Row>
     )
 }

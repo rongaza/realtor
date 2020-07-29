@@ -5,7 +5,6 @@ import { AuthContext } from '../Firebase/context'
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
     const context = useContext(AuthContext)
-    console.log(context)
     return (
         <Route
             {...rest}

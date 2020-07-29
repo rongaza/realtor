@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Router, Route } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
+
 import { useStorageReducer } from 'react-storage-hooks'
 
 import Navigation from '../Navigation'
@@ -8,7 +10,7 @@ import SignUp from '../SignUp'
 import SignIn from '../SignIn'
 import Dashboard from '../Dashboard/Dashboard'
 import Account from '../Account'
-import AddListing from '../AddListing'
+import AddListing from '../AddListing/AddListing'
 import ListingDetails from '../ListingDetails/ListingDetails'
 import EditListing from '../EditListing/EditListing'
 
@@ -19,6 +21,8 @@ import * as SESSION from '../Firebase/authReducer'
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 import * as ROUTES from '../../constants/routes'
+
+const history = createBrowserHistory()
 
 function App() {
     const initialState = { authUser: false }
@@ -35,14 +39,12 @@ function App() {
                 authUserDispatch({ type: SESSION.SIGN_IN, payload: user })
             }
         })
-    }, [])
+    }, [authUserDispatch])
 
-    useEffect(() => {
-        console.log(authUser)
-    }, [authUser])
+    useEffect(() => {}, [authUser])
     return (
         <AuthContext.Provider value={{ authUser, authUserDispatch }}>
-            <Router>
+            <Router history={history}>
                 <div>
                     <Navigation />
 
